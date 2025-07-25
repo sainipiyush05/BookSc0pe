@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Documents - DESIDOC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-book-open me-2"></i>DESIDOC Library
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">{{ user.full_name }}</span>
+                <a class="nav-link" href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-list me-2"></i>Browse Documents</h3>
+            </div>
+            <div class="card-body">
+                {% if books %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Showing {{ total_books }} document(s) you have access to
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Subject</th>
+                                    <th>Pages</th>
+                                    <th>Classification</th>
+                                    <th>Upload Date</th>
+                                    <th>Uploaded By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for book in books %}
+                                    <tr>
+                                        <td><strong>{{ book.title }}</strong></td>
+                                        <td>{{ book.author or 'Unknown' }}</td>
+                                        <td>{{ book.subject or 'Not specified' }}</td>
+                                        <td>{{ book.total_pages }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ 'danger' if book.classification == 'confidential' else 'primary' }}">
+                                                {{ book.classification.title() }}
+                                            </span>
+                                        </td>
+                                        <td>{{ book.upload_date }}</td>
+                                        <td>{{ book.uploaded_by }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        No documents available or database connection required.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
